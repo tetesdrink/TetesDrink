@@ -1306,7 +1306,7 @@
           <label class="block font-bold text-stone-700 mb-1">Foto Real-Pict Minuman</label>
           <div class="flex items-center gap-3">
             <div class="w-16 h-16 rounded-2xl bg-stone-100 border border-kenangan-border overflow-hidden shrink-0 flex items-center justify-center">
-              <img id="formProductImagePreview" src="const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";" alt="Preview" class="w-full h-full object-cover">
+              <img id="formProductImagePreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E" alt="Preview" class="w-full h-full object-cover">
             </div>
             <div class="flex-1 space-y-2">
               <input type="file" id="formProductImageFile" accept="image/*" onchange="handleProductImageFile(event)" class="text-[11px] text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-kenangan-red cursor-pointer">
@@ -1376,7 +1376,7 @@
           <label class="block font-bold text-stone-700 mb-1">Foto Banner (Upload File atau URL) <span class="text-red-500">*</span></label>
           <div class="space-y-2">
             <div class="w-full h-32 rounded-2xl bg-stone-100 border border-kenangan-border overflow-hidden flex items-center justify-center">
-              <img id="formBannerImagePreview" src="const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";" alt="Preview Banner" class="w-full h-full object-cover">
+              <img id="formBannerImagePreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E" alt="Preview Banner" class="w-full h-full object-cover">
             </div>
             <div class="flex items-center gap-3">
               <input type="file" id="formBannerImageFile" accept="image/*" onchange="handleBannerImageFile(event)" class="text-[11px] text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-kenangan-red cursor-pointer">
@@ -1418,6 +1418,8 @@
     /* ============================================================
        A. DEFAULT DATA DEFINITIONS
        ============================================================ */
+    const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
+
     const DEFAULT_PRODUCTS = [
       {
         id: "prod-1",
@@ -1501,9 +1503,7 @@
       }
     ];
 
-    const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
-
-    const DEFAULT_BRANDING = {
+        const DEFAULT_BRANDING = {
       name: "TETESDRINK",
       ext: ".co",
       slogan: "Flavor bit full",
