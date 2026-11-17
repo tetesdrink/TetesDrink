@@ -224,7 +224,7 @@
             </button>
             <button onclick="openProductForm('add')" class="px-4 py-2 rounded-2xl bg-kenangan-red hover:bg-kenangan-redHover text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
               <i data-lucide="plus" class="w-4 h-4"></i>
-              <span>+ Tambah Menu Baru</span>
+              <span>Tambah Menu Baru</span>
             </button>
           </div>
         </div>
@@ -258,7 +258,7 @@
           </div>
           <button onclick="openBannerForm('add')" class="px-4 py-2 rounded-2xl bg-kenangan-red hover:bg-kenangan-redHover text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
             <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>+ Tambah Slide</span>
+            <span>Tambah Slide</span>
           </button>
         </div>
         <div id="adminBannerGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -329,7 +329,7 @@
           </div>
           <button onclick="openSocialForm('add')" class="px-4 py-2 rounded-2xl bg-kenangan-red hover:bg-kenangan-redHover text-white text-xs font-bold flex items-center gap-1.5 shadow-sm">
             <i data-lucide="plus" class="w-4 h-4"></i>
-            <span>+ Tambah Kontak</span>
+            <span>Tambah Kontak</span>
           </button>
         </div>
         <div id="adminSocialsList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -503,6 +503,30 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    
+    function normalizeImageUrl(url) {
+      if (!url) return "";
+      let u = String(url).trim();
+      if (u === "-" || u === "undefined" || u === "null") return "";
+
+      // Ekstrak URL dari formula =IMAGE("...") jika ada
+      const formulaMatch = u.match(/=IMAGE\(["']([^"']+)["']\)/i);
+      if (formulaMatch && formulaMatch[1]) u = formulaMatch[1].trim();
+
+      // Jika format Google Drive (view, edit, uc, open, atau file/d/...)
+      const driveMatch = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i);
+      if (driveMatch && driveMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
+      }
+      
+      const idMatch = u.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
+      if (u.includes("drive.google.com") && idMatch && idMatch[1]) {
+        return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+      }
+
+      return u;
     }
 
     function formatRupiah(num) {
@@ -748,7 +772,7 @@
           document.getElementById("prodFormDesc").value = p.description || "";
         }
       } else {
-        title.textContent = "+ Tambah Varian Baru";
+        title.textContent = "Tambah Varian Baru";
         document.getElementById("prodFormId").value = "prod-" + Date.now();
         document.getElementById("prodFormName").value = "";
         document.getElementById("prodFormCategory").value = "Original";
@@ -939,30 +963,52 @@
         
         let rowsHtml = "";
         list.forEach(o => {
-          const proofBtn = o.proofUrl && o.proofUrl !== "-" ? `
-            <button onclick="viewImage('${escapeHTML(o.proofUrl)}')" class="px-2.5 py-1 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-[10px] flex items-center gap-1 border border-stone-200">
-              <i data-lucide="image" class="w-3 h-3 text-kenangan-red"></i>
-              <span>Lihat Struk</span>
-            </button>
-          ` : `<span class="text-stone-300 text-[10px]">-</span>`;
+          const rawProof = o.proofUrl || o.proofBase64 || "";
+          const cleanProofUrl = normalizeImageUrl(rawProof);
+          
+          let proofThumbnailHtml = "";
+          if (cleanProofUrl) {
+            proofThumbnailHtml = `
+              <div class="flex flex-col items-center gap-1 shrink-0">
+                <button onclick="viewImage('${escapeHTML(cleanProofUrl)}')" class="relative group/thumb w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border-2 border-stone-200 hover:border-kenangan-red shadow-sm hover:scale-105 transition-all bg-white flex items-center justify-center cursor-pointer" title="Klik perbesar foto bukti pembayaran">
+                  <img src="${escapeHTML(cleanProofUrl)}" alt="Bukti Transfer" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-stone-900/40 opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition-opacity">
+                    <i data-lucide="maximize-2" class="w-4 h-4 text-white drop-shadow"></i>
+                  </div>
+                </button>
+                <span class="text-[9px] font-bold text-stone-400">Bukti Bayar</span>
+              </div>
+            `;
+          } else {
+            proofThumbnailHtml = `
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-stone-100 border border-dashed border-stone-300 flex flex-col items-center justify-center text-stone-400 text-[9px] font-medium text-center p-1 shrink-0">
+                <i data-lucide="image-off" class="w-3.5 h-3.5 mb-0.5 text-stone-300"></i>
+                <span>Tanpa Foto</span>
+              </div>
+            `;
+          }
 
           rowsHtml += `
-            <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-              <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                  <span class="font-black text-kenangan-espresso">${escapeHTML(o.orderId)}</span>
+            <div class="p-3.5 sm:p-4 rounded-2xl bg-stone-50 border border-stone-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs hover:border-stone-300 transition-all">
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="font-black text-kenangan-red font-mono">${escapeHTML(o.orderId)}</span>
                   <span class="text-[10px] bg-white px-2 py-0.5 rounded text-stone-500 font-medium border border-stone-200">${escapeHTML(o.timeString)}</span>
-                  <span class="text-[10px] bg-red-50 text-kenangan-red px-2 py-0.5 rounded font-bold">${escapeHTML(o.shippingMethod)}</span>
+                  <span class="text-[10px] bg-red-50 text-kenangan-red px-2 py-0.5 rounded font-bold uppercase">${escapeHTML(o.shippingMethod)}</span>
+                  <span class="text-[10px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded font-bold uppercase">Via ${escapeHTML(o.paymentMethod || 'QRIS')}</span>
                 </div>
-                <div class="font-bold text-stone-800">
-                  <span>${escapeHTML(o.custName)}</span> • <span class="text-stone-500">${escapeHTML(o.custPhone)}</span>
+                <div class="font-extrabold text-sm text-stone-800">
+                  <span>${escapeHTML(o.custName)}</span> <span class="text-stone-300 font-normal">|</span> <span class="text-stone-600 font-mono text-xs font-semibold">${escapeHTML(o.custPhone)}</span>
                 </div>
-                <div class="text-stone-600">${escapeHTML(o.itemsSummary || '-')}</div>
+                <div class="text-stone-600 text-xs font-medium leading-relaxed">${escapeHTML(o.itemsSummary || '-')}</div>
                 ${o.shippingAddress && o.shippingAddress !== '-' ? `<div class="text-[11px] text-kenangan-red font-semibold">📍 ${escapeHTML(o.shippingAddress)}</div>` : ''}
               </div>
-              <div class="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto gap-2">
-                <div class="font-black text-sm text-kenangan-espresso">${formatRupiah(o.grandTotal)}</div>
-                <div>${proofBtn}</div>
+              <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-200">
+                <div class="text-left sm:text-right">
+                  <div class="text-[10px] text-stone-400 font-bold uppercase">Total Bayar</div>
+                  <div class="font-black text-sm sm:text-base text-emerald-600">${formatRupiah(o.grandTotal)}</div>
+                </div>
+                <div>${proofThumbnailHtml}</div>
               </div>
             </div>
           `;
