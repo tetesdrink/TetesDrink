@@ -621,7 +621,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label class="relative flex flex-col p-4 rounded-2xl bg-white border-2 border-kenangan-red cursor-pointer shipping-radio-card" id="cardPickup">
-                <input type="radio" name="shippingMethod" value="pickup" checked onchange="toggleShippingMethod('pickup')" class="sr-only">
+                <input type="radio" name="shippingMethod" value="Ambil di Kampus" checked onchange="toggleShippingMethod('Ambil di Kampus')" class="sr-only">
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-xs font-bold text-kenangan-espresso flex items-center gap-1.5">🎓 Ambil di Kampus</span>
                   <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase">GRATIS</span>
@@ -631,7 +631,7 @@
               </label>
 
               <label class="relative flex flex-col p-4 rounded-2xl bg-white border-2 border-stone-200 cursor-pointer shipping-radio-card" id="cardDelivery">
-                <input type="radio" name="shippingMethod" value="delivery" onchange="toggleShippingMethod('delivery')" class="sr-only">
+                <input type="radio" name="shippingMethod" value="Diantar" onchange="toggleShippingMethod('Diantar')" class="sr-only">
                 <div class="flex items-center justify-between mb-1">
                   <span class="text-xs font-bold text-kenangan-espresso flex items-center gap-1.5">🛵 Delivery Kilat</span>
                   <span class="px-2 py-0.5 rounded-full bg-kenangan-redLight text-kenangan-red text-[10px] font-black uppercase">&lt; 1KM</span>
@@ -1133,7 +1133,7 @@
     let orders = [];
     let selectedCategory = "all";
     let searchQuery = "";
-    let selectedShipping = "pickup";
+    let selectedShipping = "Ambil di Kampus";
     let selectedPaymentMethod = "qris";
     let proofBase64 = "";
 
@@ -2047,7 +2047,8 @@
       const cardPickup = document.getElementById("cardPickup");
       const cardDelivery = document.getElementById("cardDelivery");
 
-      if (method === "delivery") {
+      const isDelivery = method.toLowerCase().includes("antar") || method === "delivery";
+      if (isDelivery) {
         addrWrapper.classList.remove("hidden");
         cardDelivery.className = "relative flex flex-col p-4 rounded-2xl bg-white border-2 border-kenangan-red cursor-pointer shipping-radio-card";
         cardPickup.className = "relative flex flex-col p-4 rounded-2xl bg-white border-2 border-stone-200 cursor-pointer shipping-radio-card";
@@ -2070,14 +2071,14 @@
 
       if (!name) { errName.classList.remove("hidden"); valid = false; } else { errName.classList.add("hidden"); }
       if (!phone || phone.length < 9) { errPhone.classList.remove("hidden"); valid = false; } else { errPhone.classList.add("hidden"); }
-      if (selectedShipping === "delivery" && !address) { errAddr.classList.remove("hidden"); valid = false; } else { errAddr.classList.add("hidden"); }
+      if ((selectedShipping.toLowerCase().includes("antar") || selectedShipping === "delivery") && !address) { errAddr.classList.remove("hidden"); valid = false; } else { errAddr.classList.add("hidden"); }
 
       if (valid) goToStep(3);
     }
 
     function updateStep3Summary() {
       const subtotal = getCartSubtotalPrice();
-      const shippingCost = (selectedShipping === "delivery") ? 1000 : 0;
+      const shippingCost = ((selectedShipping.toLowerCase().includes("antar") || selectedShipping === "delivery")) ? 1000 : 0;
       const grandTotal = subtotal + shippingCost;
 
       document.getElementById("step3Subtotal").textContent = formatRupiah(subtotal);
@@ -2085,7 +2086,7 @@
       const shippingLabel = document.getElementById("step3ShippingLabel");
       const shippingFee = document.getElementById("step3ShippingFee");
       
-      if (selectedShipping === "delivery") {
+      if ((selectedShipping.toLowerCase().includes("antar") || selectedShipping === "delivery")) {
         shippingLabel.textContent = "Ongkos Kirim (Delivery < 1km):";
         shippingFee.textContent = "+Rp 1.000";
         shippingFee.className = "font-bold text-kenangan-red";
@@ -2178,10 +2179,10 @@
 
         const custName = (document.getElementById("custName")?.value || "").trim();
         const custPhone = (document.getElementById("custPhone")?.value || "").trim();
-        const deliveryAddress = selectedShipping === "delivery" ? (document.getElementById("deliveryAddress")?.value || "").trim() : "-";
+        const deliveryAddress = (selectedShipping.toLowerCase().includes("antar") || selectedShipping === "delivery") ? (document.getElementById("deliveryAddress")?.value || "").trim() : "-";
         
         const subtotal = getCartSubtotalPrice();
-        const shippingCost = selectedShipping === "delivery" ? 1000 : 0;
+        const shippingCost = (selectedShipping.toLowerCase().includes("antar") || selectedShipping === "delivery") ? 1000 : 0;
         const grandTotal = subtotal + shippingCost;
 
         // Auto Decrement Stok (lokal + push ke Google Sheets)
@@ -2269,7 +2270,7 @@
         `Halo Admin TETESDRINK.co, saya sudah bayar:%0A` +
         `👤 *Nama:* ${order.custName}%0A` +
         `📱 *No. WA:* ${order.custPhone}%0A` +
-        `📦 *Pengiriman:* ${order.shippingMethod === 'delivery' ? 'Delivery Kilat (< 1km)' : 'Ambil di Kampus'}%0A` +
+        `📦 *Pengiriman:* ${order.shippingMethod}%0A` +
         (order.shippingMethod === 'delivery' ? `📍 *Alamat:* ${order.shippingAddress}%0A` : '') +
         `💳 *Metode:* ${order.paymentMethod.toUpperCase()}%0A%0A` +
         `*Rincian Menu:*%0A${itemSummary}%0A%0A` +
