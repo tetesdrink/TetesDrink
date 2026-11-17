@@ -618,7 +618,7 @@
 
     function loadLocalData() {
       try {
-        products = JSON.parse(localStorage.getItem(STORAGE_KEY_PRODUCTS)) || [];
+        products = (JSON.parse(localStorage.getItem(STORAGE_KEY_PRODUCTS)) || []).map(normalizeProduct);
         banners = JSON.parse(localStorage.getItem(STORAGE_KEY_BANNERS)) || [];
         branding = JSON.parse(localStorage.getItem(STORAGE_KEY_BRANDING)) || { name: "TETESDRINK", ext: ".co", slogan: "Flavor bit full" };
         socials = JSON.parse(localStorage.getItem(STORAGE_KEY_SOCIALS)) || [];
@@ -662,7 +662,7 @@
         const res = await fetch(`${SHEET_API_URL}?action=getProducts`, { cache: "no-store" });
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          products = data;
+          products = data.map(normalizeProduct);
           localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
           renderProductTable();
           renderStats();
@@ -670,6 +670,33 @@
       } catch(e) {
         console.warn("Gagal sync produk:", e);
       }
+    }
+
+    
+    function normalizeProduct(p) {
+      if (!p) return p;
+      let cat = String(p.category || "").trim();
+      let img = String(p.image || "").trim();
+      let desc = String(p.description || "").trim();
+      let badge = String(p.badge || "").trim();
+
+      // Deteksi jika category tertukar dengan link gambar (akibat urutan kolom backend spreadsheet lama)
+      if (cat.startsWith("http") || cat.includes("drive.google.com")) {
+        const realImg = cat;
+        const realCat = (desc && !desc.startsWith("http") && !desc.includes("drive.google.com")) ? desc : "Original";
+        const realDesc = badge || "";
+        p.category = realCat;
+        p.image = realImg;
+        p.description = realDesc;
+      }
+      
+      // Jika category kosong atau aneh
+      if (!p.category || p.category === "-" || p.category.startsWith("http")) {
+        p.category = "Original";
+      }
+
+      p.image = normalizeImageUrl(p.image);
+      return p;
     }
 
     function renderProductTable(filterQuery = "") {
@@ -684,20 +711,27 @@
         return;
       }
 
-      list.forEach((p, idx) => {
+      list.forEach((rawP, idx) => {
+        const p = normalizeProduct(rawP);
         const tr = document.createElement("tr");
         tr.className = "hover:bg-stone-50/80 transition-colors";
         tr.innerHTML = `
           <td class="p-3.5 pl-6 flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-stone-100 overflow-hidden shrink-0 border border-stone-200">
-              <img src="${p.image || 'assets/qris.jpg'}" alt="${escapeHTML(p.name)}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23E7E5E4\'/ %3E%3C/svg%3E';">
+              <img src="${escapeHTML(normalizeImageUrl(p.image)) || 'assets/qris.jpg'}" alt="${escapeHTML(p.name)}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 400 400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23E7E5E4\'/ %3E%3C/svg%3E';">
             </div>
             <div>
               <div class="font-extrabold text-stone-800">${escapeHTML(p.name)}</div>
               <div class="text-[10px] text-stone-400">ID: ${escapeHTML(p.id)}</div>
             </div>
           </td>
-          <td class="p-3.5 font-medium text-stone-600">${escapeHTML(p.category)}</td>
+          <td class="p-3.5 font-medium text-stone-600">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${
+              p.category === 'Coffee Based' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+              p.category === 'With Topping' ? 'bg-purple-100 text-purple-800 border border-purple-200' :
+              'bg-emerald-50 text-emerald-700 border border-emerald-200'
+            }">${escapeHTML(p.category || 'Original')}</span>
+          </td>
           <td class="p-3.5 font-bold text-stone-900">${formatRupiah(p.price)}</td>
           <td class="p-3.5 text-center">
             <div class="inline-flex items-center gap-1.5 bg-stone-100 p-1 rounded-xl border border-stone-200">
@@ -963,7 +997,7 @@
         
         let rowsHtml = "";
         list.forEach(o => {
-          const rawProof = o.proofUrl || o.proofBase64 || "";
+          const rawProof = o.proofUrl || o.proofBase64 || o.receiptUrl || o.buktiPembayaran || "";
           const cleanProofUrl = normalizeImageUrl(rawProof);
           
           let proofThumbnailHtml = "";
@@ -988,6 +1022,26 @@
             `;
           }
 
+          // Parsing menu summary secara akurat (mendukung array items, string itemsSummary, dan variasi field)
+          let menuSummary = "-";
+          if (o.itemsSummary && typeof o.itemsSummary === "string" && o.itemsSummary.trim() && o.itemsSummary !== "-") {
+            menuSummary = o.itemsSummary.trim();
+          } else if (Array.isArray(o.items) && o.items.length > 0) {
+            menuSummary = o.items.map(it => {
+              if (!it) return "";
+              if (typeof it === "string") return it.trim();
+              const name = it.name || it.productName || it.productId || "Menu";
+              const qty = it.qty || it.quantity || 1;
+              if (/\(\d+x\)/i.test(name)) return name;
+              return `${name} (${qty}x)`;
+            }).filter(Boolean).join(", ");
+          } else if (typeof o.items === "string" && o.items.trim() && o.items !== "-") {
+            menuSummary = o.items.trim();
+          }
+          if (!menuSummary || menuSummary === "-") {
+            menuSummary = o.rincianMenu || o.orderItems || "-";
+          }
+
           const isDelivery = String(o.shippingMethod || "").toLowerCase().includes("antar");
           const shippingBadge = isDelivery 
             ? `<span class="text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-2.5 py-0.5 rounded-full font-bold">🛵 Diantar</span>`
@@ -1008,7 +1062,7 @@
                   <span class="text-stone-600 font-mono text-xs font-semibold">${escapeHTML(o.custPhone || '-')}</span>
                 </div>
                 <div class="text-stone-700 text-xs font-semibold bg-stone-50 p-2.5 rounded-xl border border-stone-100">
-                  <span class="text-stone-400 font-normal">Menu: </span>${escapeHTML(o.itemsSummary || '-')}
+                  <span class="text-stone-400 font-normal">Menu: </span><span class="font-bold text-stone-800">${escapeHTML(menuSummary)}</span>
                 </div>
                 ${o.shippingAddress && o.shippingAddress !== '-' ? `<div class="text-[11px] text-kenangan-red font-semibold">📍 ${escapeHTML(o.shippingAddress)}</div>` : ''}
               </div>
