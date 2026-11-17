@@ -163,7 +163,7 @@
   <!-- Info toko untuk layar kecil (di desktop tampil di header) -->
   <div class="md:hidden bg-stone-100 border-b border-kenangan-border px-4 py-2 text-[11px] text-stone-700 flex items-center gap-2 overflow-x-auto no-scrollbar whitespace-nowrap">
     <span class="store-dot w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-    <span class="font-medium">Stand Tel-U Surabaya / Kopma • Sen - Jum 08.00 - 16.00 WIB</span>
+    <span class="font-medium">Stand <span class="whitespace-nowrap">Tel-U</span> Surabaya / Kopma • Sen - Jum 08.00 - 16.00 WIB</span>
     <span class="text-stone-300">•</span>
     <span class="text-kenangan-red font-semibold">Delivery &lt; 1km +Rp 1.000 🛵</span>
   </div>
@@ -191,7 +191,7 @@
         </button>
 
         <!-- Carousel Indicators (Dots) -->
-        <div id="carouselIndicators" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+        <div id="carouselIndicators" class="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-20">
           <!-- Rendered via JavaScript -->
         </div>
 
@@ -203,7 +203,7 @@
           <span class="text-xl leading-none shrink-0" aria-hidden="true">🎓</span>
           <div class="min-w-0">
             <div class="text-xs font-bold text-kenangan-espresso">Ambil di Kampus</div>
-            <div class="text-[11px] text-kenangan-textMuted">Tel-U Surabaya / Kopma</div>
+            <div class="text-[11px] text-kenangan-textMuted"><span class="whitespace-nowrap">Tel-U</span> Surabaya / Kopma</div>
           </div>
         </div>
         <div role="listitem" class="flex items-center gap-3 px-3 sm:px-5 py-3 md:py-1 border-l border-stone-200">
@@ -217,7 +217,7 @@
           <span class="text-xl leading-none shrink-0" aria-hidden="true">⚡</span>
           <div class="min-w-0">
             <div class="text-xs font-bold text-kenangan-espresso">Bayar Praktis</div>
-            <div class="text-[11px] text-kenangan-textMuted">QRIS, BCA, BNI, Mandiri</div>
+            <div class="text-[11px] text-kenangan-textMuted">QRIS & Transfer m-Banking</div>
           </div>
         </div>
         <div role="listitem" class="flex items-center gap-3 px-3 sm:px-5 py-3 md:py-1 border-l border-t border-stone-200 md:border-t-0">
@@ -289,6 +289,49 @@
     </div>
 
   </main>
+
+
+  <!-- ========================================================== -->
+  <!-- 3.5. TESTIMONI & MOMEN PELANGGAN (MINI SLIDER 1x1)        -->
+  <!-- ========================================================== -->
+  <section id="testimoni" class="py-10 bg-white border-t border-b border-kenangan-border overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+        <div>
+          <div class="inline-flex items-center gap-1.5 text-xs font-bold text-kenangan-red uppercase tracking-wider mb-1">
+            <i data-lucide="heart" class="w-3.5 h-3.5 fill-kenangan-red text-kenangan-red"></i>
+            Cerita & Momen Segar Pelanggan
+          </div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-kenangan-espresso tracking-tight">
+            Momen Sahabat TETESDRINK
+          </h2>
+          <p class="text-xs sm:text-sm text-kenangan-textMuted mt-0.5">
+            Foto testimoni teman-teman kampus menikmati dinginnya botol 250ml higienis!
+          </p>
+        </div>
+
+        <!-- Slider Controls -->
+        <div class="flex items-center gap-2 self-end sm:self-auto">
+          <button onclick="prevTestimoni()" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all shadow-subtle active:scale-95" aria-label="Foto Sebelumnya">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+          </button>
+          <button onclick="nextTestimoni()" class="w-9 h-9 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center justify-center transition-all shadow-subtle active:scale-95" aria-label="Foto Selanjutnya">
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Testimoni 1x1 Mini Carousel Track -->
+      <div class="relative overflow-hidden" id="testimoniWrapper">
+        <div id="testimoniTrack" class="flex gap-3 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2 snap-x snap-mandatory">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+    </div>
+  </section>
 
   <!-- ========================================================== -->
   <!-- 4. BULK ORDER / CATERING BANNER (MINIMALIST WARM RED)      -->
@@ -362,7 +405,7 @@
           <div>
             <h3 class="text-base font-bold text-kenangan-espresso">Stand Penjemputan Kampus</h3>
             <p class="text-xs sm:text-sm text-kenangan-textMuted mt-1">
-              Booth TETESDRINK, <strong>Kampus Telkom University Surabaya</strong> atau <strong>Koperasi Mahasiswa (Kopma) Tel-U Surabaya</strong>.
+              Booth TETESDRINK, <strong>Kampus Telkom University Surabaya</strong> atau <strong>Koperasi Mahasiswa (Kopma) <span class="whitespace-nowrap">Tel-U</span> Surabaya</strong>.
             </p>
             <div class="mt-3 flex items-center gap-1.5 text-xs text-kenangan-red font-semibold">
               <i data-lucide="navigation" class="w-3.5 h-3.5"></i>
@@ -432,8 +475,8 @@
         </div>
 
         <div class="text-center md:text-left text-xs">
-          <p class="text-stone-700 font-medium">Stand Resmi: Kampus Telkom University Surabaya / Kopma Tel-U.</p>
-          <p class="text-[11px] text-stone-400 mt-0.5">Pembayaran: QRIS, BCA, BNI, Mandiri.</p>
+          <p class="text-stone-700 font-medium">Stand Resmi: Kampus Telkom University Surabaya / <span class="whitespace-nowrap">Kopma Tel-U</span>.</p>
+          <p class="text-[11px] text-stone-400 mt-0.5">Metode Pembayaran: QRIS & Transfer m-Banking.</p>
         </div>
 
         <!-- Tombol Admin Mode (HANYA ADA DI SINI SESUAI INSTRUKSI) -->
@@ -560,7 +603,7 @@
                   <span class="text-xs font-bold text-kenangan-espresso flex items-center gap-1.5">🎓 Ambil di Kampus</span>
                   <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase">GRATIS</span>
                 </div>
-                <p class="text-[11px] text-kenangan-textMuted">Ambil mandiri di Kampus Telkom University Surabaya / Koperasi Mahasiswa (Kopma) Tel-U Surabaya.</p>
+                <p class="text-[11px] text-kenangan-textMuted">Ambil mandiri di Kampus Telkom University Surabaya / Koperasi Mahasiswa (Kopma) <span class="whitespace-nowrap">Tel-U</span> Surabaya.</p>
                 <span class="text-xs font-bold text-emerald-600 mt-2">Rp 0 (Free Ongkir)</span>
               </label>
 
@@ -645,7 +688,7 @@
                     <span>Download QRIS</span>
                   </a>
                   <div class="text-xs text-stone-600 text-center space-y-0.5">
-                    <div>Scan via <strong class="text-stone-900">BCA, GoPay, OVO, Dana, ShopeePay, Livin</strong>, atau m-Banking apapun.</div>
+                    <div>Scan via <strong class="text-stone-900">QRIS Semua m-Banking & e-Wallet</strong> (BCA, Mandiri, BRI, BNI, GoPay, Dana, OVO, ShopeePay, dll).</div>
                     <div class="text-[11px] text-stone-400">Pengguna Smartphone: Unduh QRIS di atas lalu upload dari galeri di aplikasi pembayaran.</div>
                   </div>
                 </div>
@@ -662,7 +705,7 @@
                     <span class="text-xs font-bold text-kenangan-espresso">Bank Central Asia</span>
                   </div>
                   <div class="font-mono text-sm font-bold text-stone-900 mt-1 select-all" id="bcaAcc">7210481898</div>
-                  <div class="text-[10px] text-stone-500">a.n TETESDRINK INDONESIA</div>
+                  <div class="text-[10px] text-stone-500">a.n Mochamad Ferdi Arafah</div>
                 </div>
                 <button type="button" onclick="copyToClipboard('7210481898', this)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-xs font-bold text-kenangan-red flex items-center gap-1 transition-all">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -678,7 +721,7 @@
                     <span class="text-xs font-bold text-kenangan-espresso">Bank Negara Indonesia</span>
                   </div>
                   <div class="font-mono text-sm font-bold text-stone-900 mt-1 select-all" id="bniAcc">1858766674</div>
-                  <div class="text-[10px] text-stone-500">a.n TETESDRINK INDONESIA</div>
+                  <div class="text-[10px] text-stone-500">a.n Mochamad Ferdi Arafah</div>
                 </div>
                 <button type="button" onclick="copyToClipboard('1858766674', this)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-xs font-bold text-kenangan-red flex items-center gap-1 transition-all">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -694,7 +737,7 @@
                     <span class="text-xs font-bold text-kenangan-espresso">Bank Mandiri</span>
                   </div>
                   <div class="font-mono text-sm font-bold text-stone-900 mt-1 select-all" id="mandiriAcc">1410029227097</div>
-                  <div class="text-[10px] text-stone-500">a.n TETESDRINK INDONESIA</div>
+                  <div class="text-[10px] text-stone-500">a.n Mochamad Ferdi Arafah</div>
                 </div>
                 <button type="button" onclick="copyToClipboard('1410029227097', this)" class="px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-xs font-bold text-kenangan-red flex items-center gap-1 transition-all">
                   <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -1263,7 +1306,7 @@
           <label class="block font-bold text-stone-700 mb-1">Foto Real-Pict Minuman</label>
           <div class="flex items-center gap-3">
             <div class="w-16 h-16 rounded-2xl bg-stone-100 border border-kenangan-border overflow-hidden shrink-0 flex items-center justify-center">
-              <img id="formProductImagePreview" src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=300&q=80" alt="Preview" class="w-full h-full object-cover">
+              <img id="formProductImagePreview" src="const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";" alt="Preview" class="w-full h-full object-cover">
             </div>
             <div class="flex-1 space-y-2">
               <input type="file" id="formProductImageFile" accept="image/*" onchange="handleProductImageFile(event)" class="text-[11px] text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-kenangan-red cursor-pointer">
@@ -1333,7 +1376,7 @@
           <label class="block font-bold text-stone-700 mb-1">Foto Banner (Upload File atau URL) <span class="text-red-500">*</span></label>
           <div class="space-y-2">
             <div class="w-full h-32 rounded-2xl bg-stone-100 border border-kenangan-border overflow-hidden flex items-center justify-center">
-              <img id="formBannerImagePreview" src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80" alt="Preview Banner" class="w-full h-full object-cover">
+              <img id="formBannerImagePreview" src="const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";" alt="Preview Banner" class="w-full h-full object-cover">
             </div>
             <div class="flex items-center gap-3">
               <input type="file" id="formBannerImageFile" accept="image/*" onchange="handleBannerImageFile(event)" class="text-[11px] text-stone-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-stone-100 file:text-kenangan-red cursor-pointer">
@@ -1383,7 +1426,7 @@
         price: 10000,
         stock: 35,
         emoji: "🍫",
-        image: "https://images.unsplash.com/photo-1541658016709-82535e94bc69?auto=format&fit=crop&w=600&q=80",
+        image: SKELETON_IMG,
         description: "Es bubuk cokelat klasik manis pekat & dingin menyegarkan, dikemas higienis ke dalam botol 250ml siap minum."
       },
       {
@@ -1393,7 +1436,7 @@
         price: 10000,
         stock: 25,
         emoji: "🍓",
-        image: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=600&q=80",
+        image: SKELETON_IMG,
         description: "Rasa strawberry segar manis asam favorit masa kecil yang nyegerin, dikemas praktis dalam botol 250ml."
       },
       {
@@ -1403,7 +1446,7 @@
         price: 12000,
         stock: 20,
         emoji: "☕",
-        image: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80",
+        image: SKELETON_IMG,
         description: "Perpaduan bubuk kopi cappucino nikmat dengan aroma wangi tiramisu manis nagih dalam kemasan botol 250ml."
       },
       {
@@ -1413,7 +1456,7 @@
         price: 15000,
         stock: 30,
         emoji: "🍪",
-        image: "https://images.unsplash.com/photo-1628557044797-f21a177c37ec?auto=format&fit=crop&w=600&q=80",
+        image: SKELETON_IMG,
         description: "Manis lembut red velvet creamy dengan limpahan taburan remahan red oreo renyah di dalam botol 250ml."
       },
       {
@@ -1423,7 +1466,7 @@
         price: 15000,
         stock: 18,
         emoji: "🥭",
-        image: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=600&q=80",
+        image: SKELETON_IMG,
         description: "Es rasa mangga tropical manis segar dengan potongan buah mangga asli di dalamnya, sensasi dinginnya nendang!"
       }
     ];
@@ -1435,7 +1478,7 @@
         subtitle: "Minuman es bubuk manis segar pinggir jalan, di-repack higienis ke botol dingin siap dibawa ke kelas atau kosan.",
         badge: "🥤 BOTOL 250ML PRAKTIS",
         tag: "Kemasan Botol Dingin Higienis",
-        image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=1200&q=80",
+        image: SKELETON_IMG,
         active: true
       },
       {
@@ -1444,7 +1487,7 @@
         subtitle: "Sensasi crunchy red oreo crumbs & segarnya potongan buah mangga asli di setiap tegukan botol 250ml.",
         badge: "✨ WITH TOPPING SPESIAL",
         tag: "Topping Melimpah & Nyegerin",
-        image: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=1200&q=80",
+        image: SKELETON_IMG,
         active: true
       },
       {
@@ -1453,10 +1496,12 @@
         subtitle: "Format botol 250ml praktis dibagikan. Diskon 15% untuk >100 pcs, penawaran spesial >500 pcs, free sewa toples es 24 liter & jaminan segar!",
         badge: "🎉 EVENT & BULK ORDER",
         tag: "Free Sewa Toples 24L • Jaminan Segar",
-        image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80",
+        image: SKELETON_IMG,
         active: true
       }
     ];
+
+    const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
 
     const DEFAULT_BRANDING = {
       name: "TETESDRINK",
@@ -1473,7 +1518,7 @@
     const STORAGE_KEY_BANNERS = "tetesdrink_banners_v4";
     const STORAGE_KEY_BRANDING = "tetesdrink_branding_v3";
     const STORAGE_KEY_SOCIALS = "tetesdrink_socials_v1";
-    const ADMIN_PIN = "Maan060309";
+    const ADMIN_PINS = ["Maan060309", "Tetes@segar99"];
 
     /* ============================================================
        GOOGLE SHEETS SYNC CONFIG
@@ -1520,6 +1565,10 @@
       // ✅ Langsung sync dari Google Sheets saat halaman dibuka
       syncProductsFromSheet();
       syncOrdersFromSheet();
+      syncBannersFromSheet();
+      syncTestimonialsFromDrive();
+      renderTestimonials();
+      startTestimoniTimer();
     });
 
     /* ============================================================
@@ -1572,7 +1621,7 @@
         // Kolom: id | name | category | price | stock | emoji | image | description
         const fetched = sheetData.map(row => {
           const rawImage = String(row["image"] || row["Image"] || "").trim();
-          const cleanImage = normalizeImageUrl(rawImage) || "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80";
+          const cleanImage = normalizeImageUrl(rawImage) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
 
           return {
             id: String(row["id"] || row["Id"] || row["ID"] || "").trim(),
@@ -1933,23 +1982,23 @@
 
         slide.innerHTML = `
           <div class="relative w-full h-full overflow-hidden">
-            <img src="${b.image}" alt="${b.title}" draggable="false" class="w-full h-full object-cover select-none">
+            <img src="${b.image}" alt="${b.title}" draggable="false" class="w-full h-full object-cover select-none" onerror="this.onerror=null; this.src='${SKELETON_IMG}';">
 
-            <!-- Dark Gradient Overlay for legibility -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/15 flex flex-col justify-end pl-14 pr-14 pt-5 pb-10 sm:px-20 sm:pt-10 sm:pb-12 text-white">
-              <div class="max-w-2xl space-y-2">
-                <span class="inline-block px-3 py-1 rounded-full bg-kenangan-red text-white text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
+            <!-- Gradient Overlay: Ringan di HP agar gambar banner terlihat jelas -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent flex flex-col justify-end px-4 sm:px-20 pt-4 pb-8 sm:pb-14 text-white">
+              <div class="max-w-2xl space-y-1 sm:space-y-2">
+                <span class="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-kenangan-red text-white text-[9px] sm:text-[11px] font-extrabold uppercase tracking-wider shadow-sm">
                   ${b.badge || 'PROMO'}
                 </span>
-                <h3 class="text-lg sm:text-3xl font-extrabold leading-tight text-white drop-shadow-sm">
+                <h3 class="text-xs sm:text-2xl md:text-3xl font-extrabold leading-tight sm:leading-tight text-white drop-shadow-sm line-clamp-1 sm:line-clamp-2">
                   ${b.title}
                 </h3>
-                <p class="text-xs sm:text-sm text-stone-200 line-clamp-2 max-w-xl">
+                <p class="hidden sm:block text-xs sm:text-sm text-stone-200 line-clamp-2 max-w-xl leading-relaxed">
                   ${b.subtitle || ''}
                 </p>
                 ${b.tag ? `
-                  <div class="pt-1 flex items-center gap-2 text-xs font-semibold text-amber-300">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                  <div class="pt-0.5 flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold text-amber-300">
+                    <i data-lucide="sparkles" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>
                     <span>${b.tag}</span>
                   </div>
                 ` : ''}
@@ -1961,7 +2010,7 @@
 
         const dot = document.createElement("button");
         dot.setAttribute("aria-label", `Banner ${idx + 1}`);
-        dot.className = `carousel-dot h-2 rounded-full transition-all duration-500 ${idx === currentSlideIndex ? 'w-7 bg-kenangan-red' : 'w-2 bg-white/70 hover:bg-white'}`;
+        dot.className = `carousel-dot h-1.5 sm:h-2 rounded-full transition-all duration-500 ${idx === currentSlideIndex ? 'w-5 sm:w-7 bg-kenangan-red' : 'w-1.5 sm:w-2 bg-white/70 hover:bg-white'}`;
         dot.onclick = () => goToSlide(idx);
         indicators.appendChild(dot);
       });
@@ -1976,7 +2025,7 @@
       if (!strip) return;
       strip.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
       document.querySelectorAll("#carouselIndicators .carousel-dot").forEach((dot, i) => {
-        dot.className = `carousel-dot h-2 rounded-full transition-all duration-500 ${i === currentSlideIndex ? 'w-7 bg-kenangan-red' : 'w-2 bg-white/70 hover:bg-white'}`;
+        dot.className = `carousel-dot h-1.5 sm:h-2 rounded-full transition-all duration-500 ${i === currentSlideIndex ? 'w-5 sm:w-7 bg-kenangan-red' : 'w-1.5 sm:w-2 bg-white/70 hover:bg-white'}`;
       });
     }
 
@@ -2098,7 +2147,7 @@
         card.innerHTML = `
           <div>
             <div class="relative h-48 overflow-hidden bg-stone-100">
-              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isSoldOut ? 'grayscale opacity-60' : ''}">
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${isSoldOut ? 'grayscale opacity-60' : ''}" onerror="this.onerror=null; this.src='${SKELETON_IMG}';">
               
               <!-- Badge Kategori di Pojok Kiri Bawah Foto (Tidak Akan Pernah Tabrakan dengan Stok) -->
               <div class="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl bg-white/95 backdrop-blur-md text-stone-800 text-[9px] sm:text-[10px] font-bold border border-stone-200/80 shadow-sm max-w-[70%] truncate">
@@ -2682,7 +2731,7 @@
       const err = document.getElementById("adminPinError");
       const enteredPin = pinInput.value.trim();
 
-      if (enteredPin === ADMIN_PIN) {
+      if (ADMIN_PINS.includes(enteredPin)) {
         closeAdminAuthModal();
         openAdminDashboard();
       } else {
@@ -2886,7 +2935,7 @@
       } else {
         currentEditingProductId = null;
         title.innerHTML = `<i data-lucide="plus-circle" class="w-5 h-5 text-kenangan-red"></i><span>Tambah Varian Minuman Baru</span>`;
-        document.getElementById("formProductImagePreview").src = "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=300&q=80";
+        document.getElementById("formProductImagePreview").src = SKELETON_IMG;
       }
 
       modal.classList.remove("hidden");
@@ -2926,7 +2975,7 @@
       const description = document.getElementById("formProductDesc").value.trim();
       const imageUrlInput = document.getElementById("formProductImageUrl").value.trim();
 
-      let finalImage = tempProductImageBase64 || imageUrlInput || "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80";
+      let finalImage = tempProductImageBase64 || imageUrlInput || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
 
       if (currentEditingProductId) {
         const prod = products.find(p => p.id === currentEditingProductId);
@@ -3041,7 +3090,7 @@
       } else {
         currentEditingBannerId = null;
         title.innerHTML = `<i data-lucide="plus-circle" class="w-5 h-5 text-kenangan-red"></i><span>Tambah Banner Slide Baru</span>`;
-        document.getElementById("formBannerImagePreview").src = "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80";
+        document.getElementById("formBannerImagePreview").src = SKELETON_IMG;
       }
 
       modal.classList.remove("hidden");
@@ -3079,7 +3128,7 @@
       const tag = document.getElementById("formBannerTag").value.trim();
       const imageUrlInput = document.getElementById("formBannerImageUrl").value.trim();
 
-      let finalImage = tempBannerImageBase64 || imageUrlInput || "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80";
+      let finalImage = tempBannerImageBase64 || imageUrlInput || SKELETON_IMG;
 
       if (currentEditingBannerId) {
         const b = banners.find(item => item.id === currentEditingBannerId);
@@ -3663,6 +3712,147 @@
         d.classList.toggle("bg-stone-400", !open);
       });
     }
+
+    /* ============================================================
+       N. TESTIMONIALS MINI SLIDER 1x1 (DRIVE SYNC)
+       ============================================================ */
+    const TESTIMONI_DRIVE_FOLDER_ID = "1IHVm845jeAlvUb_dWuLtI82BFn1ftJPC";
+    let testimonials = [];
+
+    // Fallback awal jika Drive belum termuat
+    const DEFAULT_TESTIMONIALS = [
+      { id: "testi-1", title: "Momen Seru 1", image: SKELETON_IMG },
+      { id: "testi-2", title: "Momen Seru 2", image: SKELETON_IMG },
+      { id: "testi-3", title: "Momen Seru 3", image: SKELETON_IMG },
+      { id: "testi-4", title: "Momen Seru 4", image: SKELETON_IMG },
+      { id: "testi-5", title: "Momen Seru 5", image: SKELETON_IMG },
+      { id: "testi-6", title: "Momen Seru 6", image: SKELETON_IMG }
+    ];
+
+    async function syncTestimonialsFromDrive() {
+      try {
+        const res = await fetch(`${SHEET_API_URL}?action=getTestimonials`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          testimonials = data.map((item, idx) => ({
+            id: item.id || `testi-${idx+1}`,
+            title: item.name || `Testimoni ${idx+1}`,
+            image: normalizeImageUrl(item.url || item.image || item.id) || SKELETON_IMG
+          }));
+          renderTestimonials();
+          console.log(`📸 Berhasil memuat ${testimonials.length} foto testimoni dari Google Drive`);
+        }
+      } catch (e) {
+        console.warn("Testimoni Drive pakai fallback:", e.message);
+      }
+    }
+
+    function renderTestimonials() {
+      const track = document.getElementById("testimoniTrack");
+      if (!track) return;
+      track.innerHTML = "";
+
+      const list = testimonials.length > 0 ? testimonials : DEFAULT_TESTIMONIALS;
+
+      list.forEach((t) => {
+        const item = document.createElement("div");
+        item.className = "shrink-0 w-36 sm:w-48 md:w-56 snap-start group cursor-pointer";
+        item.onclick = () => {
+          if (t.image && t.image !== SKELETON_IMG) viewEnlargedImage(t.image);
+        };
+
+        item.innerHTML = `
+          <div class="relative aspect-square w-full rounded-2xl overflow-hidden bg-stone-200 border border-kenangan-border shadow-subtle hover:shadow-card transition-all">
+            <img
+              src="${t.image}"
+              alt="${t.title}"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 bg-stone-200"
+              loading="lazy"
+              onerror="this.onerror=null; this.src='${SKELETON_IMG}';"
+            >
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3 text-white">
+              <span class="text-[11px] font-bold truncate flex items-center gap-1">
+                <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                <span>Lihat Foto</span>
+              </span>
+            </div>
+          </div>
+        `;
+        track.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function nextTestimoni() {
+      const track = document.getElementById("testimoniTrack");
+      if (!track) return;
+      track.scrollBy({ left: 240, behavior: "smooth" });
+    }
+
+    function prevTestimoni() {
+      const track = document.getElementById("testimoniTrack");
+      if (!track) return;
+      track.scrollBy({ left: -240, behavior: "smooth" });
+    }
+
+    // Auto-scroll testimoni setiap 3.5 detik
+    let testimoniTimer = null;
+    function startTestimoniTimer() {
+      if (testimoniTimer) clearInterval(testimoniTimer);
+      testimoniTimer = setInterval(() => {
+        const track = document.getElementById("testimoniTrack");
+        if (!track || document.hidden) return;
+        if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+          track.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          track.scrollBy({ left: 220, behavior: "smooth" });
+        }
+      }, 3500);
+    }
+
+    /* ============================================================
+       O. SYNC BANNER SLIDE DARI SPREADSHEET "Slide Banner Promo"
+       ============================================================ */
+    async function syncBannersFromSheet() {
+      try {
+        const res = await fetch(`${SHEET_API_URL}?action=getBanners`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          const fetchedBanners = data.map((row, idx) => {
+            const title = String(row["title"] || row["Judul Promo Banner"] || row["judul"] || "").trim();
+            const subtitle = String(row["subtitle"] || row["Subjudul / Deskripsi Banner"] || row["subjudul"] || "").trim();
+            const badge = String(row["badge"] || row["Badge Tag Promosi"] || "PROMO").trim();
+            const tag = String(row["tag"] || row["Highlight / Tag Bawah"] || "").trim();
+            const rawImg = String(row["image"] || row["Foto Banner (Upload File atau URL)"] || row["foto"] || "").trim();
+            const cleanImg = normalizeImageUrl(rawImg) || SKELETON_IMG;
+
+            return {
+              id: `banner-sheet-${idx + 1}`,
+              title: title || "Promo Spesial TETESDRINK",
+              subtitle: subtitle,
+              badge: badge,
+              tag: tag,
+              image: cleanImg,
+              active: true
+            };
+          }).filter(b => b.title || (b.image && b.image !== SKELETON_IMG));
+
+          if (fetchedBanners.length > 0) {
+            banners = fetchedBanners;
+            saveBannersToStorage();
+            renderCarousel();
+            console.log(`✅ Synced ${banners.length} banner dari Spreadsheet "Slide Banner Promo"`);
+          }
+        }
+      } catch (err) {
+        console.warn("Sync banner sheet:", err.message);
+      }
+    }
+
   </script>
 </body>
 </html>
