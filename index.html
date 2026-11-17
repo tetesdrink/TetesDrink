@@ -502,7 +502,13 @@
           <p class="text-[11px] text-stone-400 mt-0.5">Metode Pembayaran: QRIS & Transfer m-Banking.</p>
         </div>
 
-        <!-- Portal Admin dipisahkan ke admin.html -->
+                <!-- Link ke Portal Admin Khusus (admin.html) -->
+        <div>
+          <a href="admin.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-kenangan-red text-xs font-bold border border-stone-200 transition-all">
+            <i data-lucide="lock" class="w-3.5 h-3.5 text-kenangan-red"></i>
+            <span>Portal Admin</span>
+          </a>
+        </div>
 
       </div>
     </div>
@@ -982,6 +988,36 @@
        ============================================================ */
     const SKELETON_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
 
+    
+    function isStoreOpenNow() {
+      const now = new Date();
+      const day = now.getDay();
+      if (day === 0 || day === 6) return false;
+      const h = now.getHours();
+      return h >= 8 && h < 16;
+    }
+
+    function updateStoreStatus() {
+      const open = isStoreOpenNow();
+      document.querySelectorAll(".store-dot").forEach(d => {
+        d.classList.toggle("bg-emerald-500", open);
+        d.classList.toggle("animate-pulse", open);
+        d.classList.toggle("bg-stone-400", !open);
+      });
+    }
+
+
+    function escapeHTML(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+
     const DEFAULT_PRODUCTS = [
       {
         id: "prod-1",
@@ -1108,11 +1144,46 @@
     /* ============================================================
        C. INITIALIZATION
        ============================================================ */
+    
+    /* ============================================================
+       SOCIAL MEDIA & FOOTER CONTACTS (READ-ONLY FOR PUBLIC)
+       ============================================================ */
+    // duplicate removed
+    let socials = [];
+
+    function loadSocialsFromStorage() {
+      socials = getStorage(STORAGE_KEY_SOCIALS, [
+        { platform: "instagram", handle: "@tetesdrink.co", url: "https://instagram.com", active: true },
+        { platform: "whatsapp", handle: "WhatsApp Official", url: "https://wa.me/6288219909522", active: true }
+      ]);
+    }
+
+    function renderSocials() {
+      const list = document.getElementById("footerSocialsList");
+      if (!list) return;
+      list.innerHTML = "";
+      const activeSocials = (socials || []).filter(s => s.active !== false);
+      if (activeSocials.length === 0) {
+        list.innerHTML = '<span class="text-xs text-stone-400">Hubungi kami via WhatsApp atau datang langsung ke Stand.</span>';
+        return;
+      }
+      activeSocials.forEach(s => {
+        const a = document.createElement("a");
+        a.href = s.url || "#";
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.className = "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-stone-200 text-stone-700 hover:text-kenangan-red hover:border-kenangan-red text-xs font-semibold shadow-xs transition-all";
+        a.innerHTML = `<span>${escapeHTML(s.handle || s.platform)}</span>`;
+        list.appendChild(a);
+      });
+    }
+
+
     window.addEventListener("DOMContentLoaded", () => {
       loadBrandingFromStorage();
       loadBannersFromStorage();
       loadProductsFromStorage();   // load dari localStorage dulu (fallback)
-      loadOrdersFromStorage();
+      // Orders storage removed from public
       loadSocialsFromStorage();
 
       renderBranding();
