@@ -70,9 +70,32 @@
 
 
     /* ===== Adaptif Desktop / Mobile ===== */
-    html, body { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    html, body { overflow-x: clip; -webkit-text-size-adjust: 100%; }
     header { padding-top: env(safe-area-inset-top, 0px); }
     footer { padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px)); }
+
+    /* Floating Anchor Keranjang saat scroll */
+    #cartButton.scrolled-floating {
+      position: fixed;
+      top: 0.75rem;
+      right: 0.75rem;
+      z-index: 50;
+      box-shadow: 0 10px 25px -3px rgba(167, 30, 34, 0.35), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+      animation: cartPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
+    }
+    @media (min-width: 640px) {
+      #cartButton.scrolled-floating {
+        top: 1rem;
+        right: 1.5rem;
+      }
+    }
+    @keyframes cartPopIn {
+      from { transform: translateY(-8px) scale(0.92); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
 
     /* Modal tengah tidak pernah lebih tinggi dari layar & bisa di-scroll */
     div[id$="Modal"].items-center > div.relative { max-height: calc(100dvh - 2rem); overflow-y: auto; }
@@ -148,9 +171,9 @@
         <span class="text-kenangan-red font-semibold">Delivery &lt; 1km Cuma +Rp 1.000 🛵</span>
       </div>
 
-      <!-- Action Button (HANYA KERANJANG, Tombol Admin Dihilangkan dari Header) -->
-      <div class="flex items-center gap-3">
-        <button id="cartButton" onclick="openCartModal()" class="relative flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-2xl bg-kenangan-red hover:bg-kenangan-redHover text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow-card active:scale-[0.98] transition-all">
+      <!-- Action Button: Keranjang dengan Auto-Anchor saat Scroll -->
+      <div id="cartButtonHolder" class="flex items-center">
+        <button id="cartButton" onclick="openCartModal()" class="relative flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-kenangan-red hover:bg-kenangan-redHover text-white font-bold text-xs sm:text-sm shadow-sm hover:shadow-card active:scale-[0.98] transition-all">
           <i data-lucide="shopping-bag" class="w-4 h-4"></i>
           <span>Keranjang</span>
           <span id="navCartBadge" class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-extrabold bg-white text-kenangan-red rounded-full">0</span>
@@ -191,7 +214,7 @@
         </button>
 
         <!-- Carousel Indicators (Dots) -->
-        <div id="carouselIndicators" class="absolute bottom-2.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 z-20">
+        <div id="carouselIndicators" class="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 sm:gap-1.5 z-20">
           <!-- Rendered via JavaScript -->
         </div>
 
@@ -1816,67 +1839,24 @@
       if (state === "success") setTimeout(() => badge.classList.add("hidden"), 4000);
     }
 
+    const getStorage = (key, fallback) => {
+      try { const s = localStorage.getItem(key); return s ? JSON.parse(s) : fallback; } catch (e) { return fallback; }
+    };
+    const setStorage = (key, val) => {
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
+    };
+
     function loadBrandingFromStorage() {
-      const saved = localStorage.getItem(STORAGE_KEY_BRANDING);
-      if (saved) {
-        try {
-          branding = JSON.parse(saved);
-          if (branding.slogan === "Freshness In Every Drop") { branding.slogan = DEFAULT_BRANDING.slogan; saveBrandingToStorage(); }
-        } catch(e) { branding = { ...DEFAULT_BRANDING }; }
-      } else {
-        branding = { ...DEFAULT_BRANDING };
-        saveBrandingToStorage();
-      }
+      branding = getStorage(STORAGE_KEY_BRANDING, { ...DEFAULT_BRANDING });
+      if (branding.slogan === "Freshness In Every Drop") branding.slogan = DEFAULT_BRANDING.slogan;
     }
-
-    function saveBrandingToStorage() {
-      try {
-        localStorage.setItem(STORAGE_KEY_BRANDING, JSON.stringify(branding));
-      } catch (e) {
-        console.error("Gagal simpan branding ke localStorage:", e);
-      }
-    }
-
-    function loadBannersFromStorage() {
-      const saved = localStorage.getItem(STORAGE_KEY_BANNERS);
-      if (saved) {
-        try { banners = JSON.parse(saved); } catch(e) { banners = [...DEFAULT_BANNERS]; }
-      } else {
-        banners = [...DEFAULT_BANNERS];
-        saveBannersToStorage();
-      }
-    }
-
-    function saveBannersToStorage() {
-      localStorage.setItem(STORAGE_KEY_BANNERS, JSON.stringify(banners));
-    }
-
-    function loadProductsFromStorage() {
-      const saved = localStorage.getItem(STORAGE_KEY_PRODUCTS);
-      if (saved) {
-        try { products = JSON.parse(saved); } catch(e) { products = [...DEFAULT_PRODUCTS]; }
-      } else {
-        products = [...DEFAULT_PRODUCTS];
-        saveProductsToStorage();
-      }
-    }
-
-    function saveProductsToStorage() {
-      localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
-    }
-
-    function loadOrdersFromStorage() {
-      const saved = localStorage.getItem(STORAGE_KEY_ORDERS);
-      if (saved) {
-        try { orders = JSON.parse(saved); } catch(e) { orders = []; }
-      } else {
-        orders = [];
-      }
-    }
-
-    function saveOrdersToStorage() {
-      localStorage.setItem(STORAGE_KEY_ORDERS, JSON.stringify(orders));
-    }
+    function saveBrandingToStorage() { setStorage(STORAGE_KEY_BRANDING, branding); }
+    function loadBannersFromStorage() { banners = getStorage(STORAGE_KEY_BANNERS, [...DEFAULT_BANNERS]); }
+    function saveBannersToStorage() { setStorage(STORAGE_KEY_BANNERS, banners); }
+    function loadProductsFromStorage() { products = getStorage(STORAGE_KEY_PRODUCTS, [...DEFAULT_PRODUCTS]); }
+    function saveProductsToStorage() { setStorage(STORAGE_KEY_PRODUCTS, products); }
+    function loadOrdersFromStorage() { orders = getStorage(STORAGE_KEY_ORDERS, []); }
+    function saveOrdersToStorage() { setStorage(STORAGE_KEY_ORDERS, orders); }
 
     function formatRupiah(amount) {
       return new Intl.NumberFormat("id-ID", {
@@ -2010,7 +1990,7 @@
 
         const dot = document.createElement("button");
         dot.setAttribute("aria-label", `Banner ${idx + 1}`);
-        dot.className = `carousel-dot h-1.5 sm:h-2 rounded-full transition-all duration-500 ${idx === currentSlideIndex ? 'w-5 sm:w-7 bg-kenangan-red' : 'w-1.5 sm:w-2 bg-white/70 hover:bg-white'}`;
+        dot.className = `carousel-dot h-1 sm:h-1.5 rounded-full transition-all duration-300 ${idx === currentSlideIndex ? 'w-3.5 sm:w-6 bg-kenangan-red shadow-sm' : 'w-1 sm:w-1.5 bg-white/75 hover:bg-white'}`;
         dot.onclick = () => goToSlide(idx);
         indicators.appendChild(dot);
       });
@@ -2025,7 +2005,7 @@
       if (!strip) return;
       strip.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
       document.querySelectorAll("#carouselIndicators .carousel-dot").forEach((dot, i) => {
-        dot.className = `carousel-dot h-1.5 sm:h-2 rounded-full transition-all duration-500 ${i === currentSlideIndex ? 'w-5 sm:w-7 bg-kenangan-red' : 'w-1.5 sm:w-2 bg-white/70 hover:bg-white'}`;
+        dot.className = `carousel-dot h-1 sm:h-1.5 rounded-full transition-all duration-300 ${i === currentSlideIndex ? 'w-3.5 sm:w-6 bg-kenangan-red shadow-sm' : 'w-1 sm:w-1.5 bg-white/75 hover:bg-white'}`;
       });
     }
 
@@ -2301,6 +2281,35 @@
       }
       return subtotal;
     }
+
+    
+    /* ============================================================
+       AUTO-ANCHOR FLOATING CART ON SCROLL
+       ============================================================ */
+    (function initFloatingCart() {
+      const btn = document.getElementById("cartButton");
+      const holder = document.getElementById("cartButtonHolder");
+      if (!btn) return;
+
+      let isFloating = false;
+      const updateCartAnchor = () => {
+        const shouldFloat = window.scrollY > 55;
+        if (shouldFloat === isFloating) return;
+        isFloating = shouldFloat;
+        if (shouldFloat) {
+          if (holder) holder.style.minWidth = `${btn.offsetWidth}px`;
+          btn.classList.add("scrolled-floating");
+        } else {
+          btn.classList.remove("scrolled-floating");
+          if (holder) holder.style.minWidth = "";
+        }
+      };
+
+      window.addEventListener("scroll", updateCartAnchor, { passive: true });
+      window.addEventListener("resize", () => {
+        if (!isFloating && holder) holder.style.minWidth = "";
+      }, { passive: true });
+    })();
 
     function updateCartBadge() {
       const count = getCartTotalCount();
