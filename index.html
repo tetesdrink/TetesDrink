@@ -1214,17 +1214,27 @@
     function normalizeImageUrl(url) {
       if (!url) return "";
       let u = String(url).trim();
-      
+      if (u === "-" || u === "undefined" || u === "null") return "";
+
+      // Ekstrak URL dari formula =IMAGE("...") jika ada
+      const formulaMatch = u.match(/=IMAGE\(["']([^"']+)["']\)/i);
+      if (formulaMatch && formulaMatch[1]) u = formulaMatch[1].trim();
+
       // Jika format Google Drive (view, edit, uc, open, atau file/d/...)
       const driveMatch = u.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i);
       if (driveMatch && driveMatch[1]) {
-        return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+        return `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800`;
       }
       
-      // Jika Google Drive dengan parameter id di query string
       const idMatch = u.match(/[?&]id=([a-zA-Z0-9_-]+)/i);
       if (u.includes("drive.google.com") && idMatch && idMatch[1]) {
-        return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
+        return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w800`;
+      }
+
+      // Jika format lh3 drive tapi user butuh thumbnail yang stabil
+      const lh3Match = u.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/i);
+      if (lh3Match && lh3Match[1]) {
+        return `https://drive.google.com/thumbnail?id=${lh3Match[1]}&sz=w800`;
       }
 
       return u;
@@ -1251,36 +1261,49 @@
         }
 
         // Mapping kolom spreadsheet -> format produk lokal
-        // Kolom: id | name | category | price | stock | emoji | image | description
+        // Mendukung pergeseran kolom backend (category/image/description)
         const fetched = sheetData.map(row => {
-          const rawImage = String(row["image"] || row["Image"] || "").trim();
-          const cleanImage = normalizeImageUrl(rawImage) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='100%25' height='100%25' fill='%23E7E5E4'/%3E%3C/svg%3E";
+          let cat = String(row["category"] || row["Category"] || "").trim();
+          let rawImage = String(row["image"] || row["Image"] || "").trim();
+          let desc = String(row["description"] || row["Description"] || "").trim();
+          let badge = String(row["badge"] || row["Badge"] || "").trim();
+          let emoji = String(row["emoji"] || row["Emoji"] || "🥤").trim();
+
+          // Deteksi jika category tertukar dengan link gambar Google Drive (akibat urutan kolom backend)
+          if (cat.startsWith("http") || cat.includes("drive.google.com")) {
+            rawImage = cat;
+            cat = (desc && !desc.startsWith("http") && !desc.includes("drive.google.com")) ? desc : "Original";
+            desc = badge || "";
+          }
+
+          // Jika rawImage belum berupa link tapi ada link di description
+          if (!rawImage || (!rawImage.startsWith("http") && !rawImage.includes("drive.google.com"))) {
+            if (desc.startsWith("http") || desc.includes("drive.google.com")) {
+              rawImage = desc;
+              desc = badge || "";
+            }
+          }
+
+          // Validasi kategori agar tidak memuat link mentah
+          if (!cat || cat === "-" || cat.startsWith("http")) {
+            cat = "Original";
+          }
+
+          const cleanImage = normalizeImageUrl(rawImage) || "assets/qris.jpg";
 
           return {
             id: String(row["id"] || row["Id"] || row["ID"] || "").trim(),
             name: String(row["name"] || row["Name"] || "").trim(),
-            category: String(row["category"] || row["Category"] || "Original").trim(),
+            category: cat,
             price: parseInt(row["price"] || row["Price"] || 0, 10),
             stock: parseInt(row["stock"] || row["Stock"] || 0, 10),
-            emoji: String(row["emoji"] || row["Emoji"] || "🥤").trim(),
+            emoji: emoji,
             image: cleanImage,
-            description: String(row["description"] || row["Description"] || "").trim()
+            description: desc
           };
-        }).filter(p => p.id && p.name); // abaikan baris tanpa id/name
+        }).filter(p => p.id && p.name);
 
-        // Merge: pertahankan stok lokal yang sudah dikurangi pemesanan
-        // Jika sheet punya stok lebih baru (admin update sheet), pakai sheet
-        const mergedProducts = fetched.map(sheetProd => {
-          const localProd = products.find(p => p.id === sheetProd.id);
-          // Prioritaskan data sheet untuk semua field kecuali stok yang sudah berkurang lokal
-          return {
-            ...sheetProd,
-            // Pakai stok sheet (sumber kebenaran dari admin)
-            stock: sheetProd.stock
-          };
-        });
-
-        products = mergedProducts;
+        products = fetched;
         saveProductsToStorage();
         renderProductCatalog();
         showSyncStatus("success");
