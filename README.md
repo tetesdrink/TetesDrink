@@ -1,4 +1,4 @@
 Website gratis TetesDrink
 
 link:
-https://bangferr27.github.io/TetesDrink/
+https://tetesdrink.github.io/TetesDrink/
