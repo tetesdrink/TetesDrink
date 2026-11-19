@@ -402,7 +402,7 @@
             </div>
             <h3 class="text-base font-bold text-white">Konsultasi Catering</h3>
             <p class="text-xs text-stone-300">Respon cepat via WhatsApp resmi TETESDRINK.co.</p>
-            <a href="https://wa.me/6288219909522?text=Halo%20Admin%20TETESDRINK.co%2C%20saya%20mau%20konsultasi%20paket%20Bulk%20Order%20(Diskon%2015%25%20%2F%20Penawaran%20Spesial%20%26%20Free%20Sewa%20Toples%2024L)" target="_blank" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-900 font-extrabold text-xs shadow-md transition-all">
+            <a href="https://wa.me/628567984442?text=Halo%20Admin%20TETESDRINK.co%2C%20saya%20mau%20konsultasi%20paket%20Bulk%20Order%20(Diskon%2015%25%20%2F%20Penawaran%20Spesial%20%26%20Free%20Sewa%20Toples%2024L)" target="_blank" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-stone-900 font-extrabold text-xs shadow-md transition-all">
               <i data-lucide="message-circle" class="w-4 h-4"></i>
               Hubungi via WhatsApp
             </a>
@@ -452,9 +452,9 @@
                 <span id="storeStatusDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span id="storeStatusText">Stand Buka Sekarang</span>
               </span>
-              <a href="https://wa.me/6288219909522" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
+              <a href="https://wa.me/628567984442" target="_blank" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
                 <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
-                088219909522
+                08567984442
               </a>
             </div>
           </div>
@@ -891,12 +891,12 @@
 
         <div>
           <label class="block font-bold text-stone-700 mb-1">Handle / Username / No. Telp <span class="text-red-500">*</span></label>
-          <input type="text" id="formSocialHandle" oninput="autoFillSocialUrl()" required placeholder="Contoh: @Tetesdrink atau 088219909522" class="w-full bg-stone-50 border border-kenangan-border rounded-xl px-3.5 py-2.5 text-stone-800 font-mono focus:outline-none focus:border-kenangan-red">
+          <input type="text" id="formSocialHandle" oninput="autoFillSocialUrl()" required placeholder="Contoh: @Tetesdrink atau 08567984442" class="w-full bg-stone-50 border border-kenangan-border rounded-xl px-3.5 py-2.5 text-stone-800 font-mono focus:outline-none focus:border-kenangan-red">
         </div>
 
         <div>
           <label class="block font-bold text-stone-700 mb-1">URL Link Tautan Lengkap <span class="text-red-500">*</span></label>
-          <input type="url" id="formSocialUrl" oninput="this.dataset.auto='0'" required placeholder="Contoh: https://instagram.com/tetesdrink atau https://wa.me/6288219909522" class="w-full bg-stone-50 border border-kenangan-border rounded-xl px-3.5 py-2.5 text-stone-800 font-mono focus:outline-none focus:border-kenangan-red">
+          <input type="url" id="formSocialUrl" oninput="this.dataset.auto='0'" required placeholder="Contoh: https://instagram.com/tetesdrink atau https://wa.me/628567984442" class="w-full bg-stone-50 border border-kenangan-border rounded-xl px-3.5 py-2.5 text-stone-800 font-mono focus:outline-none focus:border-kenangan-red">
         </div>
 
         <div class="pt-1 flex items-center gap-2">
@@ -1154,8 +1154,15 @@
     function loadSocialsFromStorage() {
       socials = getStorage(STORAGE_KEY_SOCIALS, [
         { platform: "instagram", handle: "@tetesdrink.co", url: "https://instagram.com", active: true },
-        { platform: "whatsapp", handle: "WhatsApp Official", url: "https://wa.me/6288219909522", active: true }
+        { platform: "whatsapp", handle: "WhatsApp Official", url: "https://wa.me/628567984442", active: true }
       ]);
+      // Pastikan tautan WhatsApp selalu menggunakan nomor resmi terbaru 08567984442
+      socials.forEach(s => {
+        if (s.platform === "whatsapp") {
+          s.url = "https://wa.me/628567984442";
+          s.handle = "WhatsApp Official";
+        }
+      });
     }
 
     function renderSocials() {
@@ -2365,7 +2372,7 @@
         `Bukti transfer sudah saya upload di web app. Terima kasih!`;
 
       const waBtn = document.getElementById("successWhatsAppLink");
-      waBtn.href = `https://wa.me/6288219909522?text=${message}`;
+      waBtn.href = `https://wa.me/628567984442?text=${message}`;
 
       document.getElementById("successModal").classList.remove("hidden");
       lucide.createIcons();
